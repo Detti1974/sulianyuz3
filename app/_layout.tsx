@@ -1,24 +1,33 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+// app/_layout.tsx
+import "react-native-gesture-handler";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import * as React from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+// ✅ A QuizProvider default exportként van exportálva
+import QuizProvider from "../lib/QuizContext";
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+const BG = "#0b1020";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: BG }}>
+      <SafeAreaProvider>
+        {/* ✅ A QuizProvider körbefogja az egész appot */}
+        <QuizProvider>
+          <StatusBar style="light" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: BG },
+              headerStyle: { backgroundColor: BG },
+              headerTintColor: "#9df1b4ee",
+            }}
+          />
+        </QuizProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
